@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+		"http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+<!-- PROGRAMACION -->
+<!-- Se utiliza JDBC Job Store para permitir varios "nodos" de cluster GEDO -->
+	<bean id="schedulerFactory" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+
+<!-- Las propiedades DataSource nos permite usar la configuración de base de datos definida  -->
+<!-- en Spring. Por defecto usa un driver genérico -->
+	        <property name="dataSource" ref="dataSource"/>
+
+<!-- La propiedad applicationContextSchedulerContextKey, nos permite definir el contexto  -->
+<!-- en el que se ejecutará el Scheduler. Esto nos permite inyectar dependencias de los  -->
+<!-- servicios de nuestra aplicación para que se puedan usar desde los Jobs. Esto es necesario  -->
+<!-- porque el Scheduler se ejecuta en un contexto distinto del de Spring. -->
+	        <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+
+<!-- La propiedad transactionManager indica que use el gestor de transacciones definido en Spring. -->
+<!-- 	        <property name="transactionManager" ref="transactionManager"/> -->
+	       
+	        <property name="overwriteExistingJobs" value="true"/>
+	        <property name="autoStartup" value="true" />
+	        <property name="quartzProperties">
+	            <props>
+	                <prop key="org.quartz.scheduler.instanceName">QuartzScheduler</prop>
+	                <prop key="org.quartz.scheduler.instanceId">AUTO</prop>
+	                <prop key="org.quartz.jobStore.misfireThreshold">60000</prop>
+	                <prop key="org.quartz.jobStore.class">org.quartz.simpl.RAMJobStore</prop>
+ 				    <prop key="org.quartz.jobStore.driverDelegateClass">org.quartz.impl.jdbcjobstore.StdJDBCDelegate</prop>	                 
+				    <prop key="org.quartz.jobStore.tablePrefix">QRTZCO_</prop> 
+ 	                <prop key="org.quartz.jobStore.isClustered">true</prop> 
+	                <prop key="org.quartz.threadPool.class">org.quartz.simpl.SimpleThreadPool</prop>
+	                <prop key="org.quartz.threadPool.threadCount">1</prop>
+	                <prop key="org.quartz.threadPool.threadPriority">5</prop>
+	            </props>
+	      	</property>
+	      	
+<!-- Beans y atributos que se necesitaran dentro del contexto de Quartz -->
+			<property name="schedulerContextAsMap">
+				<map>
+					<entry key="suscripcionUtils" value-ref="suscripcionUtils" />
+					<entry key="mecanismoRespuestaFactory" value-ref="mecanismoRespuestaFactory" />
+					<entry key="gedoADestinatariosQuartz" value-ref="gedoADestinatariosQuartz"/>
+					<entry key="documentoTemporalDAO" value-ref="documentoTemporalDAO" />
+					<entry key="borradoTemporal" value-ref="borradoTemporal"/>
+					<entry key="usuarioService" value-ref="usuarioService"/>
+					<entry key="notificacionMailService" value-ref="notificacionMailService"/>
+					<entry key="cantidadReintentosNotificacion" value="${gedo.cantidadReintentosNotificacion}"/>
+					<entry key="tiempoReintentoConfiguracion" value="${gedo.tiempoReintentoConfiguracion}"/>
+					<entry key="cantidadMesesLimpieza" value="${gedo.limpiezaTemporales.cantidadMesesLimpieza}"/>
+					<entry key="activacionProcesoLimpieza" value="${gedo.limpiezaTemporales.activacionProcesoLimpieza}"/>
+					<entry key="activacionAvisoMail" value="${gedo.limpiezaTemporales.activacionAvisoMail}"/>
+					<entry key="appName" value="${app.name}"/>
+					<entry key="diferenciaDeDiasEntreMailYLimpieza" value="${gedo.limpiezaTemporales.diferenciaDeDiasEntreMailYLimpieza}"/>
+					<entry key="propertyConfiguracionesService" value-ref="propertyConfiguracionesService"/>
+					<entry key="pdfService" value-ref="pdfService"/>
+					<entry key="propertyConfiguracionesService" value-ref="propertyConfiguracionesService"/>
+					<entry key="tsaVerifyService" value-ref="tsaVerifyService"/>
+					
+				</map>
+			</property>
+<!-- Jobs definidos en el planificador -->
+			<property name="jobDetails">
+				<list>
+					<ref bean="GedoAvisoMailJobDetail" />
+					<ref bean="GedoLimpiezaTemporalesJobDetail" />
+					<ref bean="GedoActualizarPropertyJobDetail"/>
+<!-- 					<ref bean="StartVerificarTSAJobDetail" /> -->
+<!-- 					<ref bean="GedoVerificarTSAPropertyJobDetail" /> -->
+					
+				</list>
+			</property>
+<!-- Triggers definidos en el planificador -->
+			<property name="triggers">
+				<list>
+					<ref bean="GedoAvisoMailTrigger" />
+					<ref bean="GedoLimpiezaTemporalesTrigger" />
+					<ref bean="GedoActualizarPropertyTrigger" />
+<!-- 					<ref bean="StartTriggerVerificarTSA" /> -->
+<!-- 					<ref bean="GedoVerificarTSAPropertyTrigger" /> -->
+				</list>
+			</property>
+    </bean>
+    
+    
+    
+    
+<!--     <bean name="StartVerificarTSAJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean"> -->
+<!-- 		<property name="jobClass" -->
+<!-- 			value="ar.gob.gcaba.gedo.quartz.VerificarTSAJob" /> -->
+<!-- 		<property name="description" -->
+<!-- 			value="Job que permite consultar si el servidor de tsa esta funcionando" /> -->
+<!-- 		<property name="volatility" value="false" /> -->
+<!-- 		<property name="durability" value="true" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="StartTriggerVerificarTSA" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+<!-- 		<property name="jobDetail" ref="StartVerificarTSAJobDetail" /> -->
+<!-- 		<property name="volatility" value="false" /> -->
+<!-- 		<property name="description" -->
+<!-- 			value="Ejecuta StartTriggerVerificarTSA cada X tiempo Definido por la expresion Cron" /> -->
+<!-- 		<property name="startDelay" value="0" /> -->
+<!-- 		<property name="cronExpression" value="${gedo.verificarTSa.cron}" />  -->
+<!-- 	</bean> -->
+    
+<!-- GedoLimpiezaTemporales -->
+<!--  ************************************************************************************************************************** -->
+<!-- 	job: GedoLimpiezaTemporalesJobDetail -->
+	<bean name="GedoLimpiezaTemporalesJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="ar.gob.gcaba.gedo.limpiezaTemporales.BorradoTemporalesJob" />
+		<property name="description" value="Se realiza el borrado de los documentos temporales de Webdav y de la BBDD." />
+		<property name="group" value="GEDO" />
+		<property name="volatility" value="false" />
+		<property name="durability" value="true" />
+	</bean>
+
+<!-- 	trigger: GedoLimpiezaTemporalesTrigger -->
+		<bean id="GedoLimpiezaTemporalesTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="GedoLimpiezaTemporalesJobDetail" />
+		<property name="group" value="GEDO" />
+		<property name="volatility" value="false" />
+		<property name="description" value="Ejecuta GedoLimpiezaTemporalesJobDetail todos los 28 del mes" />
+		<property name="startDelay" value="0" />
+		<property name="cronExpression" value="${gedo.limpiezaTemporales.cronProcesoLimpieza}" />
+<!-- 		<property name="cronExpression" value="0 33 10 17 2 ?" /> -->
+	</bean>
+
+
+<!-- GedoAvisoMail -->
+<!--  ************************************************************************************************************************** -->
+<!-- 	job: GedoAvisoMailJobDetail -->
+	<bean name="GedoAvisoMailJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+		<property name="jobClass" value="ar.gob.gcaba.gedo.limpiezaTemporales.AvisoMailJob" />
+		<property name="description" value="Se realiza el envio de mail a aquellos usuario a quienes se les borraran documentos temporales" />
+		<property name="group" value="GEDO" />
+		<property name="volatility" value="false" />
+		<property name="durability" value="true" />
+	</bean>
+
+<!-- 	trigger: GedoLimpiezaTemporalesTrigger -->
+	<bean id="GedoAvisoMailTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="GedoAvisoMailJobDetail" />
+		<property name="group" value="GEDO" />
+		<property name="volatility" value="false" />
+		<property name="description" value="Ejecuta GedoAvisoMailJobDetail todos los 21 del mes." />
+		<property name="startDelay" value="0" />
+		<property name="cronExpression" value="${gedo.limpiezaTemporales.cronAvisoMail}" />
+<!-- 		<property name="cronExpression" value="0 43 14 14 2 ?" /> -->
+	</bean>
+	
+<!-- <bean name="GedoVerificarTSAPropertyJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean"> -->
+<!-- 	<property name="jobClass" -->
+<!-- 		value="ar.gob.gcaba.gedo.quartz.VerificarTSAJob" /> -->
+<!-- 	<property name="description" -->
+<!-- 		value="Se realiza la verificacion del Servidor de TSA" /> -->
+<!-- 	<property name="group" value="GEDO" /> -->
+<!-- 	<property name="volatility" value="false" /> -->
+<!-- 	<property name="durability" value="true" /> -->
+<!-- </bean> -->
+
+<!-- 	<bean id="GedoVerificarTSAPropertyTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean"> -->
+<!-- 		<property name="jobDetail" ref="GedoVerificarTSAPropertyJobDetail" /> -->
+<!-- 		<property name="group" value="GEDO" /> -->
+<!-- 		<property name="volatility" value="false" /> -->
+<!-- 		<property name="description" -->
+<!-- 			value="Ejecuta GedoVerificarTSAPropertyJobDetail todos los dias." /> -->
+<!-- 		<property name="startDelay" value="0" /> -->
+<!-- 		<property name="cronExpression" value="${gedo.verificarTSa.cron}"/> -->
+<!-- 	</bean> -->
+
+
+
+
+<!-- GedoActualizarProperty -->
+<!-- ************************************************************************************************************************** -->
+<!-- job: GedoActualizarPropertyJobDetail -->
+
+		<bean name="GedoActualizarPropertyJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+			<property name="jobClass"
+				value="ar.gob.gcaba.gedo.quartz.GedoArchivoPropertiesJob" />
+			<property name="description"
+				value="Se realiza la consulta y/o modificacion de las properties GEDO" />
+			<property name="group" value="GEDO" />
+			<property name="volatility" value="false" />
+			<property name="durability" value="true" />
+		</bean>
+	
+<!-- trigger: GedoActualizarPropertyTrigger -->
+
+		<bean id="GedoActualizarPropertyTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+			<property name="jobDetail" ref="GedoActualizarPropertyJobDetail" />
+			<property name="group" value="GEDO" />
+			<property name="volatility" value="false" />
+			<property name="description"
+				value="Ejecuta GedoActualizarPropertyJobDetail todos los dias." />
+			<property name="startDelay" value="0" />
+			<property name="cronExpression" value="${gedo.properties.cron}" />
+		</bean>
+
+<!-- EJEMPLOS   -->
+<!--  ************************************************************************************************************************** -->
+<!-- Quartz Jobs (Lo que se va a hacer) -->
+	<!--job: GedoADestinatariosExecution -->
+<!-- 	<bean name="GedoADestinatariosExecutionJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean"> -->
+<!-- 		<property name="jobClass" value="ar.gob.gcaba.gedo.services.suscripcion.gedoADestinatarios.GedoADestinatariosExecution" /> -->
+<!-- 		<property name="description" value="Se notifica a un suscriptor determinado acerca del Numero SADE o del rechazo de un potencial documento." /> -->
+<!-- 		<property name="volatility" value="false" /> -->
+<!-- 		<property name="durability" value="true" /> -->
+<!-- 	</bean> -->
+
+<!-- Quartz Triggers (Cuando se va a hacer) -->
+	<!--trigger: GedoADestinatariosExecution1MinTrigger -->
+<!-- 	<bean id="GedoADestinatariosExecution1MinTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean"> -->
+<!-- 		<property name="jobDetail" ref="GedoADestinatariosExecutionJobDetail" /> -->
+<!-- 		<property name="group" value="GEDO" /> -->
+<!-- 		<property name="volatility" value="false" /> -->
+<!-- 		<property name="description" value="Ejecuta GedoADestinatariosExecutionJobDetail en 1 minuto." /> -->
+<!-- 		<property name="startDelay" value="60000" /> -->
+<!-- 		<property name="repeatCount" value="0" /> -->
+<!-- 	</bean> -->
+
+
+</beans>
+

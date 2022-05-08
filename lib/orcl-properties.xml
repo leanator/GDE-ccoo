@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN"
+                              "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+              <bean id="dataSourceEscritorioBinary" class="oracle.jdbc.pool.OracleDataSource"
+                              destroy-method="close">
+                              <property name="URL"
+                                            value="#{systemProperties['dbStringConnect']}" />
+                              <property name="user" value="EU_GED" />
+                              <property name="password" value="#{systemProperties['dbPasswordEU']}" />
+                              <property name="connectionCachingEnabled" value="true" />
+                              <property name="connectionCacheProperties">
+                                            <value>
+                                                           MinLimit:1
+                                                           MaxLimit:20
+                                                           InitialLimit:1
+                                                           ConnectionWaitTimeout:120
+                                                           InactivityTimeout:180
+                                                           ValidateConnection:true
+      </value>
+                              </property>
+               </bean>
+
+               <bean id="dataSourceBATCH" class="oracle.jdbc.pool.OracleDataSource"
+                              destroy-method="close">
+                              <property name="URL"
+                                            value="#{systemProperties['dbStringConnect']}" />
+                              <property name="user" value="BATCH_GED" />
+                              <property name="password" value="batch_ged" />
+                              <property name="connectionCachingEnabled" value="true" />
+                              <property name="connectionCacheProperties">
+                                            <value>
+                                                           MinLimit:1
+                                                           MaxLimit:20
+                                                           InitialLimit:1
+                                                           ConnectionWaitTimeout:120
+                                                           InactivityTimeout:180
+                                                           ValidateConnection:true
+      </value>
+                              </property>
+               </bean>
+
+
+              
+               <bean id="dataSourceUsuarios" class="oracle.jdbc.pool.OracleDataSource"
+                              destroy-method="close">
+                              <property name="URL"
+                                            value="#{systemProperties['dbStringConnect']}" />
+                              <property name="user" value="CO_GED" />
+                              <property name="password" value="#{systemProperties['dbPasswordCCOO']}" />
+                              <property name="connectionCachingEnabled" value="true" />
+                              <property name="connectionCacheProperties">
+                                            <value>
+                                                           MinLimit:10
+                                                           MaxLimit:20
+                                                           InitialLimit:10
+                                                           ConnectionWaitTimeout:120
+                                                           InactivityTimeout:180
+                                                           ValidateConnection:true
+      </value>
+                              </property>
+               </bean>
+
+                           <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource"
+                              destroy-method="close">
+                              <property name="URL" value="#{systemProperties['dbStringConnect']}" />
+                              <property name="user" value="GEDO_GED" />
+                              <property name="password" value="#{systemProperties['dbPasswordGEDO']}" />
+                              <property name="connectionCachingEnabled" value="true" />
+                              <property name="connectionCacheProperties">
+                                            <value>
+                                                           MinLimit:10
+                                                           MaxLimit:20
+                                                           InitialLimit:10
+                                                           ConnectionWaitTimeout:120
+                                                           InactivityTimeout:180
+                                                           ValidateConnection:true
+                                                                                        </value>
+                              </property>
+                        </bean>
+
+                        <bean id="dataSourceSADE" class="oracle.jdbc.pool.OracleDataSource"
+                destroy-method="close">
+                <property name="URL"
+                        value="#{systemProperties['dbStringConnect']}" />
+                <property name="user" value="TRACK_GED" />
+                <property name="password" value="#{systemProperties['dbPasswordTRACK']}" />
+                <property name="connectionCachingEnabled" value="true" />
+                <property name="connectionCacheProperties">
+                        <value>
+                                MinLimit:10
+                                MaxLimit:100
+                                InitialLimit:10
+                                ConnectionWaitTimeout:120
+                                InactivityTimeout:180
+                                ValidateConnection:true
+      </value>
+                </property>
+        </bean>
+</beans>
+

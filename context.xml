@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+
+        <!-- Default set of monitored resources -->
+        <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+        <Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="euDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxPoolSize="20" minPoolSize="10"
+                name="jdbc/euDS" testOnBorrow="true"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordEU}"
+                user="eu_ged" validateConnectionOnBorrow="true" validationQuery="select 1 from dual" />
+
+        <!-- COMUNICACIONES OFICIALES -->
+        <Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="ccooDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxPoolSize="20" minPoolSize="10"
+                name="jdbc/ccooDS"  testOnBorrow="true"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordCCOO}"
+                user="CO_ged" validateConnectionOnBorrow="true" validationQuery="select 1 from dual" />
+
+        <!-- GEDO -->
+        <Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="gedoDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxPoolSize="20" minPoolSize="10"
+                name="jdbc/gedoDS" testOnBorrow="true"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordGEDO}"
+                user="GEDO_ged" validateConnectionOnBorrow="true" validationQuery="select 1 from dual" />
+
+        <!-- PF -->
+        			
+		<Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="pfDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxPoolSize="20" minPoolSize="10"
+                name="jdbc/pfDS" testOnBorrow="true"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordGEDO}"
+                user="GEDO_ged" validateConnectionOnBorrow="true" validationQuery="select 1 from dual" />
+        
+        <!-- LOYS -->
+        <Resource abandonedConnectionTimeout="100" auth="Container"
+                connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionHarvestMaxCount="1" connectionHarvestTriggerCount="10"
+                connectionPoolName="loysDS" connectionWaitTimeout="100"
+                driverClassName="oracle.jdbc.OracleDriver" factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="60" initialPoolSize="20" maxIdleTime="60"
+                maxPoolSize="200" maxStatements="60" minPoolSize="50" name="jdbc/loysDS"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordLOyS}"
+                user="LOYS_GED" />
+
+        <!-- EE -->
+        <Resource auth="Container" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.jdbc.pool.OracleDataSourceFactory" maxActive="20"
+                maxIdle="10" name="jdbc/eeDS" 
+                testOnBorrow="true" type="oracle.jdbc.pool.OracleDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordEE}"
+                user="ee_ged" validationQuery="select 1 from dual" />
+
+        <!-- ARCHIVOS -->
+        <Resource auth="Container" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.jdbc.pool.OracleDataSourceFactory" maxActive="30"
+                maxIdle="15" name="jdbc/archDS"  testOnBorrow="true"
+                type="oracle.jdbc.pool.OracleDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordARCH}"
+                user="arch_ged" validationQuery="select 1 from dual" />
+
+        <!-- NUMERADOR -->
+        <Resource auth="Container" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.jdbc.pool.OracleDataSourceFactory" maxActive="20"
+                maxIdle="10" name="jdbc/numeradorDS" 
+                testOnBorrow="true" type="oracle.jdbc.pool.OracleDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordNUME}"
+                user="NUMERADOR_ged" validationQuery="select 1 from dual" />
+
+        <!-- TRACK -->
+        <Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="sadeDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxPoolSize="20" minPoolSize="10"
+                name="jdbc/sadeDS"  testOnBorrow="true"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                user="TRACK_GED"
+                password="${dbPasswordTRACK}"
+                validateConnectionOnBorrow="true"
+                validationQuery="select 1 from dual" />
+
+        <!-- LUE -->
+        <Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="lueDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxPoolSize="20" minPoolSize="10"
+                name="jdbc/lueDS" testOnBorrow="true"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                 password="${dbPasswordLUE}"
+                user="lue_ged" validateConnectionOnBorrow="true" validationQuery="select 1 from dual" />
+
+        <!-- PSOC 1 -->
+        <Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="psocDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxPoolSize="20" minPoolSize="10"
+                name="jdbc/psocDS"  testOnBorrow="true"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordEU}"
+                user="EU_GED" validateConnectionOnBorrow="true" validationQuery="select 1 from dual" />
+
+         <!-- RLM -->
+        <Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="rlmDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxActive="20" maxIdle="10"
+                maxPoolSize="20" minPoolSize="10" name="jdbc/rlmDS" 
+                testOnBorrow="true" type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordRLM}"
+                user="RLM_GED" validateConnectionOnBorrow="true" validationQuery="select 1 from dual" />
+
+        <!-- DM -->
+        <Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="dmDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxPoolSize="20" minPoolSize="10"
+                name="jdbc/dmDS" testOnBorrow="true"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                 url="${dbStringConnect}"
+                password="${dbPasswordDM}"
+                user="DM_GED" validateConnectionOnBorrow="true"
+                validationQuery="select 1 from dual" />
+
+        <!-- RIB -->
+        <Resource auth="Container" connectionFactoryClassName="oracle.jdbc.pool.OracleDataSource"
+                connectionPoolName="ribDS" driverClassName="oracle.jdbc.OracleDriver"
+                factory="oracle.ucp.jdbc.PoolDataSourceImpl"
+                inactiveConnectionTimeout="20" maxPoolSize="20" minPoolSize="10"
+                name="jdbc/ribDS"  testOnBorrow="true"
+                type="oracle.ucp.jdbc.PoolDataSource"
+                url="${dbStringConnect}"
+                password="${dbPasswordRID}"
+                user="RID_GED" validateConnectionOnBorrow="true" validationQuery="select 1 from dual" />
+
+        <!-- NODO PARA EL PROPERTY CONFIGURATION DE EU -->
+        <Environment description="Nombre del Nodo" name="nombreNodo" override="false" type="java.lang.String" value="CCOO"/>
+
+        <!-- MASTER KEY -->
+        <Environment description="Encription master key" name="masterKey" override="false" type="java.lang.String" value="1234567890"/>
+
+        <!-- MAIL 
+        <Resource auth="Container" type="javax.mail.Session" name="mail/Session"
+                  mail.smtp.host="${mailSessMAILHOST}" mail.smtp.port="26" mail.smtp.user="${mailSessMAILUser}"
+                  mail.smtp.auth="false" mail.debug="false" mail.smtp.password="${mailSessMAILPasswd}"
+                  mail.smtp.connectiontimeout="12500" mail.smtp.from="${mailSessMAILUser}" />
+-->
+        <Resource auth="Container" type="javax.mail.Session" name="mail/Session"
+              mail.smtp.host="${mailSessMAILHOST}" mail.smtp.from="${mailSessMAILUser}"            
+              mail.debug="true"  />
+
+
+</Context>	
